@@ -15,7 +15,7 @@ import type { UpdatePasswordUseCase } from "@/domain/usecases/auth/update-passwo
  * ```tsx
  * const { signInUseCase } = useAuthUseCases();
  * await signInUseCase.execute('password', { email, password });
- * await signInUseCase.execute('google', { redirectTo: '/protected' });
+ * await signInUseCase.execute('google', { redirectTo: '/dashboard' });
  * ```
  */
 export function useAuthUseCases() {

@@ -1,15 +1,10 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { hasEnvVars } from "@/lib/utils";
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
     request,
   });
-
-  if (!hasEnvVars) {
-    return supabaseResponse;
-  }
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -37,12 +32,16 @@ export async function updateSession(request: NextRequest) {
   const { data } = await supabase.auth.getClaims();
   const user = data?.claims;
 
-  if (
-    request.nextUrl.pathname !== "/" &&
-    !user &&
-    !request.nextUrl.pathname.startsWith("/login") &&
-    !request.nextUrl.pathname.startsWith("/auth")
-  ) {
+  // Public routes that don't require authentication
+  const publicPaths = ["/", "/auth"];
+
+  const isPublic = publicPaths.some(
+    (path) =>
+      request.nextUrl.pathname === path ||
+      request.nextUrl.pathname.startsWith(`${path}/`)
+  );
+
+  if (!isPublic && !user) {
     const url = request.nextUrl.clone();
     url.pathname = "/auth/login";
     return NextResponse.redirect(url);

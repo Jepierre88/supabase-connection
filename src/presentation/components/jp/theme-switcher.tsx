@@ -12,11 +12,12 @@ import { Laptop, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
-const ThemeSwitcher = () => {
+const ICON_SIZE = 16;
+
+export function ThemeSwitcher() {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
 
-  // useEffect only runs on the client, so now we can safely show the UI
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -24,8 +25,6 @@ const ThemeSwitcher = () => {
   if (!mounted) {
     return null;
   }
-
-  const ICON_SIZE = 16;
 
   return (
     <DropdownMenu>
@@ -73,6 +72,4 @@ const ThemeSwitcher = () => {
       </DropdownMenuContent>
     </DropdownMenu>
   );
-};
-
-export { ThemeSwitcher };
+}
