@@ -17,6 +17,9 @@
 /.next/
 /out/
 
+# directory junction (real files live in src/presentation/modules)
+/src/app
+
 # production
 /build
 
