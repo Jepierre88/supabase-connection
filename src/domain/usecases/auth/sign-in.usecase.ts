@@ -1,15 +1,15 @@
 import type { AuthPort } from "../../ports/auth/auth.port";
 import type { AuthProvider } from "../../entities/auth/auth-provider.entity";
-import type { SignUpParams } from "../../entities/auth/sign-up-params.entity";
+import type { SignInParams } from "../../entities/auth/sign-in-params.entity";
 
-export class SignUpUseCase {
+export class SignInUseCase {
   private readonly authPort: AuthPort;
 
   constructor(authPort: AuthPort) {
     this.authPort = authPort;
   }
 
-  async execute(provider: AuthProvider, params: SignUpParams) {
-    return this.authPort.signUp(provider, params);
+  async execute(provider: AuthProvider, params: SignInParams) {
+    return this.authPort.signIn(provider, params);
   }
 }

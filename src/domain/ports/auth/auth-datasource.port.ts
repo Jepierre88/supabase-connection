@@ -1,20 +1,7 @@
 import type { AuthResult } from "../../entities/auth/auth-result.entity";
-import type { AuthProvider } from "../../entities/auth/auth-provider.entity";
-import type { SignInParams } from "../../entities/auth/sign-in-params.entity";
-import type { SignUpParams } from "../../entities/auth/sign-up-params.entity";
 import type { UserClaims } from "../../entities/auth/user-claims.entity";
 
-export abstract class AuthPort {
-  abstract signIn(
-    provider: AuthProvider,
-    params: SignInParams
-  ): Promise<AuthResult>;
-
-  abstract signUp(
-    provider: AuthProvider,
-    params: SignUpParams
-  ): Promise<AuthResult>;
-
+export abstract class AuthDatasourcePort {
   abstract signOut(): Promise<AuthResult>;
 
   abstract resetPasswordForEmail(

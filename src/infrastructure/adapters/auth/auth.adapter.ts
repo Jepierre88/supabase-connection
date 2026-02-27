@@ -1,71 +1,58 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
 import type { AuthResult } from "@/domain/entities/auth/auth-result.entity";
 import type { UserClaims } from "@/domain/entities/auth/user-claims.entity";
+import type { AuthProvider } from "@/domain/entities/auth/auth-provider.entity";
+import type { SignInParams } from "@/domain/entities/auth/sign-in-params.entity";
+import type { SignUpParams } from "@/domain/entities/auth/sign-up-params.entity";
 import type { AuthPort } from "@/domain/ports/auth/auth.port";
+import type { AuthStrategyFactoryPort } from "@/domain/ports/auth/auth-strategy-factory.port";
+import type { AuthDatasourcePort } from "@/domain/ports/auth/auth-datasource.port";
 
 export class AuthAdapter implements AuthPort {
-  private readonly client: SupabaseClient;
+  private readonly strategyFactory: AuthStrategyFactoryPort;
+  private readonly datasource: AuthDatasourcePort;
 
-  constructor(client: SupabaseClient) {
-    this.client = client;
+  constructor(
+    strategyFactory: AuthStrategyFactoryPort,
+    datasource: AuthDatasourcePort
+  ) {
+    this.strategyFactory = strategyFactory;
+    this.datasource = datasource;
   }
 
-  async signInWithPassword(
-    email: string,
-    password: string
+  async signIn(
+    provider: AuthProvider,
+    params: SignInParams
   ): Promise<AuthResult> {
-    const { error } = await this.client.auth.signInWithPassword({
-      email,
-      password,
-    });
-    return { success: !error, error: error?.message };
+    return this.strategyFactory.getStrategy(provider).signIn(params);
   }
 
   async signUp(
-    email: string,
-    password: string,
-    redirectTo?: string
+    provider: AuthProvider,
+    params: SignUpParams
   ): Promise<AuthResult> {
-    const { error } = await this.client.auth.signUp({
-      email,
-      password,
-      options: redirectTo ? { emailRedirectTo: redirectTo } : undefined,
-    });
-    return { success: !error, error: error?.message };
+    return this.strategyFactory.getStrategy(provider).signUp(params);
   }
 
   async signOut(): Promise<AuthResult> {
-    const { error } = await this.client.auth.signOut();
-    return { success: !error, error: error?.message };
+    return this.datasource.signOut();
   }
 
   async resetPasswordForEmail(
     email: string,
     redirectTo?: string
   ): Promise<AuthResult> {
-    const { error } = await this.client.auth.resetPasswordForEmail(email, {
-      redirectTo,
-    });
-    return { success: !error, error: error?.message };
+    return this.datasource.resetPasswordForEmail(email, redirectTo);
   }
 
   async updatePassword(password: string): Promise<AuthResult> {
-    const { error } = await this.client.auth.updateUser({ password });
-    return { success: !error, error: error?.message };
+    return this.datasource.updatePassword(password);
   }
 
   async getUser(): Promise<UserClaims | null> {
-    const { data } = await this.client.auth.getClaims();
-    if (!data?.claims) return null;
-    return data.claims as UserClaims;
+    return this.datasource.getUser();
   }
 
   async verifyOtp(tokenHash: string, type: string): Promise<AuthResult> {
-    const { error } = await this.client.auth.verifyOtp({
-      token_hash: tokenHash,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      type: type as any,
-    });
-    return { success: !error, error: error?.message };
+    return this.datasource.verifyOtp(tokenHash, type);
   }
 }

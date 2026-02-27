@@ -1,7 +1,7 @@
 "use client";
 
 import { useContainer } from "@/presentation/contexts/container.context";
-import type { LoginUseCase } from "@/domain/usecases/auth/login.usecase";
+import type { SignInUseCase } from "@/domain/usecases/auth/sign-in.usecase";
 import type { SignUpUseCase } from "@/domain/usecases/auth/sign-up.usecase";
 import type { LogoutUseCase } from "@/domain/usecases/auth/logout.usecase";
 import type { ForgotPasswordUseCase } from "@/domain/usecases/auth/forgot-password.usecase";
@@ -13,15 +13,16 @@ import type { UpdatePasswordUseCase } from "@/domain/usecases/auth/update-passwo
  *
  * @example
  * ```tsx
- * const { loginUseCase } = useAuthUseCases();
- * await loginUseCase.execute(email, password);
+ * const { signInUseCase } = useAuthUseCases();
+ * await signInUseCase.execute('password', { email, password });
+ * await signInUseCase.execute('google', { redirectTo: '/protected' });
  * ```
  */
 export function useAuthUseCases() {
   const container = useContainer();
 
   return {
-    loginUseCase: container.resolve<LoginUseCase>("loginUseCase"),
+    signInUseCase: container.resolve<SignInUseCase>("signInUseCase"),
     signUpUseCase: container.resolve<SignUpUseCase>("signUpUseCase"),
     logoutUseCase: container.resolve<LogoutUseCase>("logoutUseCase"),
     forgotPasswordUseCase: container.resolve<ForgotPasswordUseCase>(
