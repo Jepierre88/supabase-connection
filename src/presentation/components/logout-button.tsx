@@ -1,15 +1,15 @@
 "use client";
 
-import { createBrowserSupabaseClient } from "@/infrastructure/datasources/supabase/supabase-browser-client";
+import { useAuthUseCases } from "@/presentation/hooks/use-auth";
 import { Button } from "@/presentation/components/ui/button";
 import { useRouter } from "next/navigation";
 
 export function LogoutButton() {
   const router = useRouter();
+  const { logoutUseCase } = useAuthUseCases();
 
   const logout = async () => {
-    const supabase = createBrowserSupabaseClient();
-    await supabase.auth.signOut();
+    await logoutUseCase.execute();
     router.push("/auth/login");
   };
 

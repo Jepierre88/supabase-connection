@@ -2,11 +2,10 @@ import type { AuthProvider } from "@/domain/entities/auth/auth-provider.entity";
 import type { AuthStrategyPort } from "@/domain/ports/auth/auth-strategy.port";
 import { AuthStrategyFactoryPort } from "@/domain/ports/auth/auth-strategy-factory.port";
 
-export class AuthStrategyFactory extends AuthStrategyFactoryPort {
+export class AuthStrategyFactory implements AuthStrategyFactoryPort {
   private readonly strategies: Map<AuthProvider, AuthStrategyPort>;
 
   constructor(strategies: Map<AuthProvider, AuthStrategyPort>) {
-    super();
     this.strategies = strategies;
   }
 

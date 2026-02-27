@@ -4,11 +4,10 @@ import type { SignInParams } from "@/domain/entities/auth/sign-in-params.entity"
 import type { SignUpParams } from "@/domain/entities/auth/sign-up-params.entity";
 import { AuthStrategyPort } from "@/domain/ports/auth/auth-strategy.port";
 
-export class GithubAuthDatasource extends AuthStrategyPort {
+export class GithubAuthDatasource implements AuthStrategyPort {
   private readonly client: SupabaseClient;
 
   constructor(client: SupabaseClient) {
-    super();
     this.client = client;
   }
 

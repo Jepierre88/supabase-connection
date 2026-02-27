@@ -3,11 +3,10 @@ import type { AuthResult } from "@/domain/entities/auth/auth-result.entity";
 import type { UserClaims } from "@/domain/entities/auth/user-claims.entity";
 import { AuthDatasourcePort } from "@/domain/ports/auth/auth-datasource.port";
 
-export class AuthDatasource extends AuthDatasourcePort {
+export class AuthDatasource implements AuthDatasourcePort {
   private readonly client: SupabaseClient;
 
   constructor(client: SupabaseClient) {
-    super();
     this.client = client;
   }
 

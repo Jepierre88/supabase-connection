@@ -2,13 +2,12 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import type { AuthResult } from "@/domain/entities/auth/auth-result.entity";
 import type { SignInParams } from "@/domain/entities/auth/sign-in-params.entity";
 import type { SignUpParams } from "@/domain/entities/auth/sign-up-params.entity";
-import { AuthStrategyPort } from "@/domain/ports/auth/auth-strategy.port";
+import type { AuthStrategyPort } from "@/domain/ports/auth/auth-strategy.port";
 
-export class GoogleAuthDatasource extends AuthStrategyPort {
+export class GoogleAuthDatasource implements AuthStrategyPort {
   private readonly client: SupabaseClient;
 
   constructor(client: SupabaseClient) {
-    super();
     this.client = client;
   }
 
